@@ -3,6 +3,7 @@ import torch_geometric.transforms as T
 import torch
 import pandas as pd
 import numpy as np
+import os
 
 try:
     from torch.serialization import add_safe_globals
@@ -37,10 +38,15 @@ def get_raw_text_arxiv(use_text=False, seed=0):
     if not use_text:
         return data, None
 
-    nodeidx2paperid = pd.read_csv(
-        './datasets/ogbn_arxiv/mapping/nodeidx2paperid.csv.gz', compression='gzip')
+    mapping_path = './datasets/ogbn_arxiv/mapping/nodeidx2paperid.csv.gz'
+    titleabs_path = './datasets/arxiv_orig/titleabs.tsv'
+    if not os.path.exists(mapping_path) or not os.path.exists(titleabs_path):
+        text = [f'Title: arxiv node {i}\nAbstract: unavailable' for i in range(data.num_nodes)]
+        return data, text
 
-    raw_text = pd.read_csv('./datasets/arxiv_orig/titleabs.tsv',
+    nodeidx2paperid = pd.read_csv(mapping_path, compression='gzip')
+
+    raw_text = pd.read_csv(titleabs_path,
                            sep='\t', header=None, names=['paper id', 'title', 'abs'], skiprows=[0])
     raw_text = raw_text.dropna()
 
