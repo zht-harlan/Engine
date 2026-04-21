@@ -4,6 +4,16 @@ import torch
 import pandas as pd
 import numpy as np
 
+try:
+    from torch.serialization import add_safe_globals
+    from torch_geometric.data.data import Data, DataEdgeAttr, DataTensorAttr
+    from torch_geometric.data.storage import GlobalStorage
+    from torch_geometric.edge_index import EdgeIndex
+
+    add_safe_globals([Data, DataEdgeAttr, DataTensorAttr, GlobalStorage, EdgeIndex])
+except Exception:
+    pass
+
 
 def get_raw_text_arxiv(use_text=False, seed=0):
 
