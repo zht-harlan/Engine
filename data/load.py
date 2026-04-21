@@ -25,9 +25,21 @@ def load_data(dataset, use_dgl=False, use_text=False, use_gpt=False, seed=0):
     elif dataset == 'wikics':
         from data.data_utils.load_wikics import get_raw_text_wikics as get_raw_text
         num_classes = 10
+    elif dataset == 'children':
+        from data.data_utils.load_cstag import get_raw_text_children as get_raw_text
+        num_classes = None
+    elif dataset == 'history':
+        from data.data_utils.load_cstag import get_raw_text_history as get_raw_text
+        num_classes = None
     elif dataset == 'photo':
-        from data.data_utils.load_photo import get_raw_text_photo as get_raw_text
-        num_classes = 12
+        from data.data_utils.load_cstag import resolve_cstag_csv_path
+        try:
+            resolve_cstag_csv_path('photo')
+            from data.data_utils.load_cstag import get_raw_text_photo_csv as get_raw_text
+            num_classes = None
+        except FileNotFoundError:
+            from data.data_utils.load_photo import get_raw_text_photo as get_raw_text
+            num_classes = 12
     else:
         exit(f'Error: Dataset {dataset} not supported')
     
@@ -47,5 +59,8 @@ def load_data(dataset, use_dgl=False, use_text=False, use_gpt=False, seed=0):
                 text.append(content)
     else:
         data, text = get_raw_text(use_text=True, seed=seed) 
-      
+    
+    if num_classes is None:
+        num_classes = int(data.y.max().item()) + 1
+
     return data, text, num_classes

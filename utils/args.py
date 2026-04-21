@@ -52,6 +52,7 @@ class Arguments:
         
         # dynamic early exit
         self.parser.add_argument('--early', action='store_true', help="the sign of dynamic early exit")
+        self.parser.add_argument('--results_dir', type=str, help="directory for experiment csv results", default='./results')
         
     def parse_args(self):
         return self.parser.parse_args()
