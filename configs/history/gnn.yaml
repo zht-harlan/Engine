@@ -6,7 +6,7 @@ dropout: 0.2
 model: GNN
 encoder: GCN_Encoder
 norm: id
-lr: 0.0001
+lr: 0.0002
 weight_decay: 0.0005
 epochs: 200
 earlystop: True
