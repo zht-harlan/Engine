@@ -1,0 +1,13 @@
+dataset: history
+hidden_size: 256
+layer_num: 2
+activation: relu
+dropout: 0.2
+model: GNN
+encoder: GCN_Encoder
+norm: id
+lr: 0.0001
+weight_decay: 0.0005
+epochs: 200
+earlystop: True
+patience: 20
